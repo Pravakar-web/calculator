@@ -1,0 +1,489 @@
+/* ==========================================================================
+   Standard Aesthetic Calculator with History
+   Apple / iOS inspired dark minimalist design
+   ========================================================================== */
+
+:root {
+    --bg-app: #0a0e17;
+    --calc-bg: #141a24;
+    --screen-bg: #0d121b;
+    
+    /* Button Colors */
+    --btn-num-bg: #1c2432;
+    --btn-num-hover: #263143;
+    --btn-num-active: #313f56;
+    --btn-num-color: #f8fafc;
+
+    --btn-fn-bg: #2b3648;
+    --btn-fn-hover: #36445b;
+    --btn-fn-active: #455673;
+    --btn-fn-color: #cbd5e1;
+
+    --btn-op-bg: #f59e0b;
+    --btn-op-hover: #d97706;
+    --btn-op-active: #b45309;
+    --btn-op-color: #ffffff;
+
+    --btn-eq-bg: #6366f1;
+    --btn-eq-hover: #4f46e5;
+    --btn-eq-active: #4338ca;
+    --btn-eq-color: #ffffff;
+
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --shadow-calc: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+    --radius-calc: 28px;
+    --radius-btn: 18px;
+
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-app);
+    color: #ffffff;
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Calculator Shell */
+.calc-container {
+    width: 100%;
+    max-width: 375px;
+    position: relative;
+}
+
+.calculator {
+    background: var(--calc-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-calc);
+    padding: 1.25rem 1.4rem 1.4rem;
+    box-shadow: var(--shadow-calc);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header & History Toggle */
+.calc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2rem 0.2rem 0.4rem;
+}
+
+.calc-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #cbd5e1;
+}
+
+.history-toggle-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: #94a3b8;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.history-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.history-badge {
+    background: #6366f1;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    line-height: 1.2;
+}
+
+/* Display Screen */
+.calc-screen {
+    background: var(--screen-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    min-height: 105px;
+    overflow: hidden;
+}
+
+.calc-history {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #64748b;
+    min-height: 1.35rem;
+    word-break: break-all;
+    text-align: right;
+}
+
+.calc-display {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-family: var(--font-sans);
+    font-size: 2.75rem;
+    font-weight: 600;
+    text-align: right;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    padding: 0;
+    cursor: default;
+}
+
+/* Keypad Grid (4 Columns) */
+.calc-keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.7rem;
+}
+
+/* Base Button */
+.btn {
+    height: 62px;
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-sans);
+    font-size: 1.4rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: var(--transition);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active, .btn.pressed {
+    transform: scale(0.94);
+}
+
+/* Number Buttons */
+.btn-num {
+    background: var(--btn-num-bg);
+    color: var(--btn-num-color);
+}
+
+.btn-num:hover {
+    background: var(--btn-num-hover);
+}
+
+.btn-num:active, .btn-num.pressed {
+    background: var(--btn-num-active);
+}
+
+/* Function Buttons (AC, ±, %, ⌫) */
+.btn-fn {
+    background: var(--btn-fn-bg);
+    color: var(--btn-fn-color);
+    font-size: 1.25rem;
+}
+
+.btn-fn:hover {
+    background: var(--btn-fn-hover);
+    color: #ffffff;
+}
+
+.btn-fn:active, .btn-fn.pressed {
+    background: var(--btn-fn-active);
+}
+
+/* Operator Buttons (+, −, ×, ÷) */
+.btn-op {
+    background: var(--btn-op-bg);
+    color: var(--btn-op-color);
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.btn-op:hover {
+    background: var(--btn-op-hover);
+}
+
+.btn-op:active {
+    background: var(--btn-op-active);
+}
+
+.btn-op.active-op {
+    background: #ffffff;
+    color: var(--btn-op-bg);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+}
+
+/* Equals Button */
+.btn-equals {
+    background: var(--btn-eq-bg);
+    color: var(--btn-eq-color);
+    font-size: 1.6rem;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+.btn-equals:hover {
+    background: var(--btn-eq-hover);
+}
+
+.btn-equals:active, .btn-equals.pressed {
+    background: var(--btn-eq-active);
+}
+
+/* ==========================================================================
+   History Overlay Sliding Panel
+   ========================================================================== */
+.history-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 14, 23, 0.85);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-calc);
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px);
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.history-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.history-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.25rem;
+    gap: 0.85rem;
+}
+
+.history-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.75rem;
+}
+
+.history-panel-header h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.history-panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-clear-history {
+    background: transparent;
+    border: none;
+    color: #f87171;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.btn-clear-history:hover {
+    background: rgba(248, 113, 113, 0.12);
+}
+
+.btn-close-history {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #cbd5e1;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.btn-close-history:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.history-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-right: 0.25rem;
+}
+
+.history-scroll-container::-webkit-scrollbar {
+    width: 4px;
+}
+.history-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+}
+
+/* History Card */
+.history-card {
+    background: #18202d;
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 0.75rem 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.history-card:hover {
+    background: #212c3e;
+    border-color: rgba(99, 102, 241, 0.5);
+    transform: scale(1.02);
+}
+
+.history-calc-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.history-expr-line {
+    font-size: 0.82rem;
+    color: #94a3b8;
+}
+
+.history-res-line {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.history-action-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #818cf8;
+    background: rgba(99, 102, 241, 0.12);
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    transition: var(--transition);
+}
+
+.history-card:hover .history-action-pill {
+    background: #6366f1;
+    color: #ffffff;
+}
+
+.empty-history-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    color: #64748b;
+    gap: 0.4rem;
+}
+
+.empty-history-state p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #94a3b8;
+}
+
+.empty-history-state small {
+    font-size: 0.75rem;
+}
+
+.history-tip {
+    font-size: 0.72rem;
+    color: #64748b;
+    text-align: center;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+/* Toast */
+.calc-toast {
+    position: fixed;
+    bottom: 2rem;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 0.82rem;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.2s ease;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.calc-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mobile adjustments */
+@media (max-width: 400px) {
+    .calculator {
+        padding: 1rem;
+        border-radius: 24px;
+        gap: 0.85rem;
+    }
+
+    .btn {
+        height: 56px;
+        font-size: 1.25rem;
+    }
+
+    .calc-display {
+        font-size: 2.3rem;
+    }
+}

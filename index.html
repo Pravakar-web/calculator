@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Standard Mathematical Calculator with Calculation History and Recall feature.">
+    <title>Standard Calculator</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=SF+Pro+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="calc-container">
+        <div class="calculator" id="calculator">
+            <!-- Header with History Toggle -->
+            <header class="calc-header">
+                <div class="header-indicator">
+                    <span class="calc-title">Calculator</span>
+                </div>
+                <button type="button" id="historyToggleBtn" class="history-toggle-btn" title="View past calculations" aria-label="Toggle history">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>History</span>
+                    <span class="history-badge" id="historyBadge">0</span>
+                </button>
+            </header>
+
+            <!-- Display Screen -->
+            <div class="calc-screen" aria-live="polite">
+                <div class="calc-history" id="calcHistory"></div>
+                <input 
+                    type="text" 
+                    id="calcDisplay" 
+                    class="calc-display" 
+                    value="0" 
+                    readonly 
+                    aria-label="Calculator Result"
+                >
+            </div>
+
+            <!-- Standard Keypad Grid -->
+            <form class="calc-keypad" id="calcKeypad" onsubmit="return false;" role="group" aria-label="Calculator Keypad">
+                <!-- Row 1: Clear, Sign, Modulo, Divide -->
+                <button type="button" class="btn btn-fn" data-action="clear" id="clearBtn">AC</button>
+                <button type="button" class="btn btn-fn" data-action="sign">±</button>
+                <button type="button" class="btn btn-fn" data-action="percent">%</button>
+                <button type="button" class="btn btn-op" data-op="÷" data-action="operator">÷</button>
+
+                <!-- Row 2: 7, 8, 9, Multiply -->
+                <button type="button" class="btn btn-num" data-num="7">7</button>
+                <button type="button" class="btn btn-num" data-num="8">8</button>
+                <button type="button" class="btn btn-num" data-num="9">9</button>
+                <button type="button" class="btn btn-op" data-op="×" data-action="operator">×</button>
+
+                <!-- Row 3: 4, 5, 6, Subtract -->
+                <button type="button" class="btn btn-num" data-num="4">4</button>
+                <button type="button" class="btn btn-num" data-num="5">5</button>
+                <button type="button" class="btn btn-num" data-num="6">6</button>
+                <button type="button" class="btn btn-op" data-op="−" data-action="operator">−</button>
+
+                <!-- Row 4: 1, 2, 3, Add -->
+                <button type="button" class="btn btn-num" data-num="1">1</button>
+                <button type="button" class="btn btn-num" data-num="2">2</button>
+                <button type="button" class="btn btn-num" data-num="3">3</button>
+                <button type="button" class="btn btn-op" data-op="+" data-action="operator">+</button>
+
+                <!-- Row 5: 0, Decimal, Backspace, Equals -->
+                <button type="button" class="btn btn-num btn-zero" data-num="0">0</button>
+                <button type="button" class="btn btn-num" data-action="decimal">.</button>
+                <button type="button" class="btn btn-fn" data-action="backspace" title="Backspace (Delete)">⌫</button>
+                <button type="button" class="btn btn-equals" data-action="calculate">=</button>
+            </form>
+
+            <!-- Sliding History Panel Overlay -->
+            <div class="history-overlay" id="historyOverlay" aria-hidden="true">
+                <div class="history-panel">
+                    <div class="history-panel-header">
+                        <h3>Past Calculations</h3>
+                        <div class="history-panel-actions">
+                            <button type="button" id="clearAllHistoryBtn" class="btn-clear-history" title="Clear all history">Clear All</button>
+                            <button type="button" id="closeHistoryBtn" class="btn-close-history" title="Close history">✕</button>
+                        </div>
+                    </div>
+                    <div class="history-scroll-container" id="historyScrollContainer">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                    <div class="history-tip">
+                        💡 Tap any past calculation to load and continue calculating
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Visual Feedback Notification -->
+    <div id="toast" class="calc-toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
